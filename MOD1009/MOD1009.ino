@@ -46,7 +46,7 @@ void setup() {
   Wire.begin();
   Serial.println("Welcome to the MOD1009 (MS5611) test sketch");
   Serial.println("Embedded Adventures (www.embeddedadventures.com)\n");
-  mod1009.setup();
+  mod1009.init();
   
   uns16* C = mod1009.readCoefficients();
   Serial.println("MOD1009 Coefficients");
