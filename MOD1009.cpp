@@ -44,7 +44,7 @@ uns16 C[7];
 uns32 D1, D2;			//D1 = pressure, D2 = temperature
 snd32 TEMP, P;			//actual temperature and pressure
 
-void MOD1009Class::setup() {
+void MOD1009Class::init() {
 	Wire.beginTransmission(MOD1009_ADDR);
 	Wire.write(CMD_RESET);
 	Wire.endTransmission();
