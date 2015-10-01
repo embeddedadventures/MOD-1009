@@ -66,7 +66,7 @@ private:
 	
 public:
 	/*Reset device, load the coefficients from PROM*/
-	void setup();
+	void init();
 	
 	/*Read calibration coefficients at addresses 0xA2-0xAE, store into array C[]*/
 	uns16* readCoefficients();
