@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2015, Embedded Adventures
+Copyright (c) 2016, Embedded Adventures
 All rights reserved.
 
 Contact us at source [at] embeddedadventures.com
@@ -34,9 +34,9 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-/* Test sketch for MOD1009 barometric pressure and temperature sensor*/
+/* Test sketch for ms5611 barometric pressure and temperature sensor*/
 
-#include <MOD1009.h>
+#include <MS5611.h>
 #include <Wire.h>
 
 double celsius, millibar;
@@ -44,12 +44,12 @@ double celsius, millibar;
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-  Serial.println("Welcome to the MOD1009 (MS5611) test sketch");
+  Serial.println("Welcome to the MOD-1009 MS5611 barometric pressure and temperature sensor test sketch");
   Serial.println("Embedded Adventures (www.embeddedadventures.com)\n");
-  mod1009.init();
+  ms5611.init();
   
-  uns16* C = mod1009.readCoefficients();
-  Serial.println("MOD1009 Coefficients");
+  uns16* C = ms5611.readCoefficients();
+  Serial.println("ms5611 Coefficients");
   for (int i = 0; i < 7; i++) {
     Serial.print("C");
     Serial.print(i);
@@ -59,16 +59,16 @@ void setup() {
 }
 
 void loop() {
-  mod1009.readMeasurements();
-  celsius  = mod1009.getTemperature();
-  millibar = mod1009.getPressure();
+  ms5611.readMeasurements();
+  celsius  = ms5611.getTemperature();
+  millibar = ms5611.getPressure();
   serial_print();
   delay(1500);
 }
 
 //Print out the info in a neater way
 void serial_print() {
-  Serial.println("MOD1009 Measurements");
+  Serial.println("ms5611 Measurements");
   Serial.println("--------------------");
   Serial.print("Pressure: ");
   Serial.print(millibar);

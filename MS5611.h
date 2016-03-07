@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2015, Embedded Adventures
+Copyright (c) 2016, Embedded Adventures
 All rights reserved.
 
 Contact us at source [at] embeddedadventures.com
@@ -37,8 +37,8 @@ THE POSSIBILITY OF SUCH DAMAGE.
 // MS5611 MOD-1009 barometric pressure and temperature sensor Arduino library
 // Written originally by Embedded Adventures
 
-#ifndef __MOD1009_h
-#define __MOD1009_h
+#ifndef __MS5611_h
+#define __MS5611_h
 
 #include "Arduino.h"
 
@@ -49,15 +49,19 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #define uns64 unsigned long long int
 #define snd64 signed long long int
 
-#define MOD1009_ADDR 0x76
-#define CMD_RESET 0x1E
-#define READ_ADC 0x00
-#define READ_TEMP 0x58
-#define READ_MBAR 0x48
+#define MS5611_ADDR	 	0x76
+#define CMD_RESET 		0x1E
+#define READ_ADC		0x00
+#define READ_TEMP 		0x58
+#define READ_MBAR 		0x48
 
-class MOD1009Class
+class MS5611Class
 {
 private:
+	uns16 C[7];
+	uns32 D1, D2;			//D1 = pressure, D2 = temperature
+	snd32 TEMP, P;			//actual temperature and pressure
+
 	/*Read 3 bytes from ADC. Returns raw ADC data*/
 	uns32 readADC(uns8 code);
 	
@@ -81,5 +85,5 @@ public:
 	double getPressure();
 };
 
-extern MOD1009Class mod1009;
+extern MS5611Class ms5611;
 #endif

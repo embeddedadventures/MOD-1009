@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2015, Embedded Adventures
+Copyright (c) 2016, Embedded Adventures
 All rights reserved.
 
 Contact us at source [at] embeddedadventures.com
@@ -37,31 +37,29 @@ THE POSSIBILITY OF SUCH DAMAGE.
 // MS5611 MOD-1009 barometric pressure and temperature sensor Arduino library
 // Written originally by Embedded Adventures
 
-#include "MOD1009.h"
+#include "MS5611.h"
 #include "Wire.h"
 
-uns16 C[7];
-uns32 D1, D2;			//D1 = pressure, D2 = temperature
-snd32 TEMP, P;			//actual temperature and pressure
 
-void MOD1009Class::init() {
-	Wire.beginTransmission(MOD1009_ADDR);
+
+void MS5611Class::init() {
+	Wire.beginTransmission(MS5611_ADDR);
 	Wire.write(CMD_RESET);
 	Wire.endTransmission();
 }
 	
-uns16* MOD1009Class::readCoefficients() {
+uns16* MS5611Class::readCoefficients() {
 	uns8 high_byte, low_byte;
 	uns8 calib_addr;
 	delay(5);
 	for (int i = 0; i < 7; i++)
 	{
 		calib_addr = 0xA0 + (i * 2);
-		Wire.beginTransmission(MOD1009_ADDR);
+		Wire.beginTransmission(MS5611_ADDR);
 		Wire.write(calib_addr);
 		Wire.endTransmission();
 
-		Wire.requestFrom(MOD1009_ADDR, 2);
+		Wire.requestFrom(MS5611_ADDR, 2);
 		if (Wire.available()) {
 			high_byte = Wire.read();
 			low_byte = Wire.read();
@@ -75,18 +73,18 @@ uns16* MOD1009Class::readCoefficients() {
 	return C;
 }
 
-uns32 MOD1009Class::readADC(uns8 code) {
+uns32 MS5611Class::readADC(uns8 code) {
 	uns8 raw[3];
 
-	Wire.beginTransmission(MOD1009_ADDR);
+	Wire.beginTransmission(MS5611_ADDR);
 	Wire.write(code);
 	Wire.endTransmission();
 	delay(10);
-	Wire.beginTransmission(MOD1009_ADDR);
+	Wire.beginTransmission(MS5611_ADDR);
 	Wire.write(READ_ADC);
 	Wire.endTransmission();
 
-	Wire.requestFrom(MOD1009_ADDR, 3);
+	Wire.requestFrom(MS5611_ADDR, 3);
 	if (Wire.available()) {
 		raw[2] = Wire.read();
 		raw[1] = Wire.read();
@@ -95,7 +93,7 @@ uns32 MOD1009Class::readADC(uns8 code) {
 	return raw[0] + (raw[1] * 256) + (raw[2] * 65536);
 }
 
-void MOD1009Class::calculate() {
+void MS5611Class::calculate() {
 	snd32 dT = D2 - ((uns64)C[5] * 256);
 	snd64 OFF = ((snd64)C[2] * 65536) + ((C[4] * dT) / 128);
 	snd64 SENS = ((snd32)C[1] * 32768) + ((C[3] * dT) / 256);
@@ -103,19 +101,19 @@ void MOD1009Class::calculate() {
 	P = ((((snd64)D1 * SENS) / 2097152) - OFF) / 32768;
 }
 
-void MOD1009Class::readMeasurements() {
+void MS5611Class::readMeasurements() {
 	D1 = readADC(READ_MBAR);
 	D2 = readADC(READ_TEMP);
 	calculate();
 }
 
-double MOD1009Class::getTemperature() {
+double MS5611Class::getTemperature() {
 	return TEMP / 100.0;
 }
 
-double MOD1009Class::getPressure() {
+double MS5611Class::getPressure() {
 	return P / 100.0;
 }
 
-MOD1009Class mod1009;
+MS5611Class ms5611;
 
