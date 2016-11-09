@@ -49,6 +49,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #define uns64 unsigned long long int
 #define snd64 signed long long int
 
+//If using MOD1009v3, change address to 0x77
 #define MS5611_ADDR	 	0x76
 #define CMD_RESET 		0x1E
 #define READ_ADC		0x00
